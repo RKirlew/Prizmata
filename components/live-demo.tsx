@@ -194,7 +194,7 @@ export function LiveDemo() {
                         Question
                       </th>
                       <th className="border-b border-slate-800 px-4 py-2.5 font-semibold text-slate-200">
-                        Answer (Generated via RAG)
+                        Answer
                       </th>
                     </tr>
                   </thead>
