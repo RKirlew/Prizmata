@@ -29,8 +29,24 @@ export const metadata: Metadata = {
   title: "Prizmata — Auto-fill security questionnaires from your SOC2",
   description:
     "Upload your security documentation once. Paste any questionnaire. Get a completed CSV ready for Excel or Google Sheets.",
+  icons: {
+    icon: [
+      {
+        url: "/logo.ico",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/logo.ico",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        url: "/logo.ico",
+        type: "image/x-icon",
+      },
+    ],
+    apple: "/apple-icon.png",
+  },
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{
