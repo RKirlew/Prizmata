@@ -1,4 +1,5 @@
 import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
@@ -28,24 +29,6 @@ export const metadata: Metadata = {
   title: "Prizmata — Auto-fill security questionnaires from your SOC2",
   description:
     "Upload your security documentation once. Paste any questionnaire. Get a completed CSV ready for Excel or Google Sheets.",
-  generator: "v0.app",
-  icons: {
-    icon: [
-      {
-        url: "/logo.ico",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/logo.ico",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/logo.ico",
-        type: "image/x-icon",
-      },
-    ],
-    apple: "/apple-icon.png",
-  },
 };
 
 export default function RootLayout({
@@ -60,18 +43,27 @@ export default function RootLayout({
     >
       <body className={`${headingFont.variable} ${bodyFont.variable}`}>
         {children}
-        {process.env.NODE_ENV === "production" && <Analytics />}
-      </body>
-      <!-- Google tag (gtag.js) -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=AW-981815739">
-      </script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
 
-        gtag('config', 'AW-981815739');
-      </script>
+        {process.env.NODE_ENV === "production" && (
+          <>
+            <Analytics />
+
+            <Script
+              async
+              src="https://www.googletagmanager.com/gtag/js?id=AW-981815739"
+            />
+
+            <Script id="google-ads">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'AW-981815739');
+              `}
+            </Script>
+          </>
+        )}
+      </body>
     </html>
   );
 }

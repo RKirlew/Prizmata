@@ -22,6 +22,34 @@ async function trackEvent(type: string, data?: any) {
   }
 }
 
+const SAMPLE_SOC2 = `
+Access Control
+Production access is restricted using role-based access control (RBAC).
+Employee access requests require manager approval and are reviewed quarterly.
+Multi-factor authentication (MFA) is enforced for all administrative accounts.
+
+Encryption
+Customer data is encrypted at rest using AES-256.
+All external traffic is encrypted in transit using TLS 1.2+.
+
+Security Monitoring
+Infrastructure and application logs are collected centrally and monitored.
+Alerts are generated for suspicious authentication activity.
+
+Incident Response
+The company maintains a documented incident response policy.
+Security incidents are triaged, investigated, and escalated within defined SLAs.
+Post-incident reviews are conducted.
+
+Business Continuity
+Backups are performed daily and tested quarterly.
+Disaster recovery procedures are documented and reviewed annually.
+
+Security Testing
+Independent penetration tests are conducted annually.
+Critical findings are remediated and validated.
+`;
+
 const SAMPLE_QUESTIONS = `Do you encrypt data at rest?
 What is your incident response process?
 Do you perform regular penetration testing?
@@ -35,7 +63,7 @@ export function LiveDemo() {
   const [rows, setRows] = useState<Row[] | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [generating, setGenerating] = useState(false);
-
+  const [usingDemo, setUsingDemo] = useState(false);
   async function handleGenerate() {
     if (!socInput.trim()) {
       alert("Please paste your SOC 2 text context first.");
@@ -80,7 +108,13 @@ export function LiveDemo() {
       setGenerating(false);
     }
   }
+  function loadDemo() {
+    setSocInput(SAMPLE_SOC2);
+    setQuestionnaireInput(SAMPLE_QUESTIONS);
+    setUsingDemo(true);
 
+    trackEvent("demo_loaded");
+  }
   function handleDownload() {
     if (!rows) return;
     const escape = (s: string) => `"${s.replace(/"/g, '""')}"`;
@@ -114,6 +148,17 @@ export function LiveDemo() {
           matches answers and returns a completed questionnaire ready for
           review.
         </p>
+        <p className="mb-3 text-xs text-slate-500">
+          No SOC2 handy? Try the sample workflow instantly.
+        </p>
+        <div className="mt-5 flex justify-center">
+          <button
+            onClick={loadDemo}
+            className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-900"
+          >
+            Try Sample SOC2 →
+          </button>
+        </div>
       </div>
 
       <div className="grid gap-5 lg:grid-cols-2">
@@ -149,15 +194,20 @@ export function LiveDemo() {
             onChange={(e) => setQuestionnaireInput(e.target.value)}
             spellCheck={false}
             className="min-h-64 flex-1 resize-none rounded-lg border border-slate-700 bg-slate-950 p-4 font-mono text-sm leading-relaxed text-slate-200 outline-none transition-colors placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
-            placeholder="Paste security questionnaire..."
+            placeholder="Paste SOC2 text or click Try Sample SOC2"
           />
+
           <button
             onClick={handleGenerate}
             disabled={generating}
             className="mt-4 inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-500 disabled:opacity-50"
           >
             <Sparkles className="size-4" />
-            {generating ? "Embedding & Searching..." : "Generate Live Answers"}
+            {generating
+              ? "Embedding & Searching..."
+              : usingDemo
+                ? "Generate Demo Answers"
+                : "Generate Live Answers"}
           </button>
         </div>
       </div>
