@@ -62,6 +62,16 @@ export default function RootLayout({
         {children}
         {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=AW-981815739">
+      </script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'AW-981815739');
+      </script>
     </html>
   );
 }
